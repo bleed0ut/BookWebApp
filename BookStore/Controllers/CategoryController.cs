@@ -22,5 +22,17 @@ namespace BookStore.Controllers
         {
             return View();
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult Create(Category category)
+        {
+            _dbContext.Categories.Add(category);
+            _dbContext.SaveChanges();
+            return Redirect("Index");
+        }
     }
 }
