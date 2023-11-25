@@ -30,9 +30,58 @@ namespace BookStore.Controllers
         [HttpPost]
         public IActionResult Create(Category category)
         {
-            _dbContext.Categories.Add(category);
+            if (category.Name == category.Description)
+            {
+                ModelState.AddModelError("Name", "Name cannot be equal to description");
+            }
+            if(ModelState.IsValid)
+            {
+                _dbContext.Categories.Add(category);
+                _dbContext.SaveChanges();
+                TempData["success"] = "Category Created Successfully!";
+                return Redirect("Index");
+            }
+            
+            return View();
+        }
+        
+        public IActionResult Edit(int? id) {
+            if (id == 0 || id == null)
+            {
+                return NotFound();
+            }
+
+            Category? category = _dbContext.Categories.Find(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
+        }
+        [HttpPost]
+        public IActionResult Edit(Category category) {
+            _dbContext.Categories.Update(category);
             _dbContext.SaveChanges();
-            return Redirect("Index");
+            TempData["success"] = "Category Updated Successfully!";
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == 0 || id == null)
+                return NotFound();
+            Category category = _dbContext.Categories.Find(id);
+            if (category == null)
+                return NotFound();
+            return View(category);
+        }
+        [HttpPost]
+        public IActionResult Delete(Category category) {
+            _dbContext.Categories.Remove(category);
+            _dbContext.SaveChanges();
+            TempData["success"] = "Category Deleted Successfully!";
+            return RedirectToAction("Index");
         }
     }
 }

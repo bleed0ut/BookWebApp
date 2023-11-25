@@ -18,6 +18,7 @@ namespace BookStore.Data
                 new Category { Id=3, Name="Roman", Description="Kissing under the sunset", DisplayOrder=1},
                 new Category { Id=4, Name = "Science", Description = "Research to save the earth", DisplayOrder =4}
                 );
+
         }
     }
 }
