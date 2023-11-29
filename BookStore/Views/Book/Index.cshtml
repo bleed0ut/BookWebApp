@@ -1,0 +1,35 @@
+﻿@model List<Book>
+<partial name="_Notification" />
+<div class="row-6">
+    <div class="col-6">
+        <h1>List of Books</h1>
+    </div>
+    <div class="col-6">
+        <a asp-controller="Book" asp-action="CreateUpdate" class="btn btn-primary">Create a book</a>
+    </div>
+    <table class=" table table-bordered">
+        <thead>
+            <tr>
+                <td>Title</td>
+                <td>Description</td>
+                <td>Author</td>
+                <td>Price</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var book in Model)
+            {
+                <tr>
+                    <td>@book.Title</td>
+                    <td>@book.Description</td>
+                    <td>@book.Author</td>
+                    <td>@book.Price</td>
+                    <td>
+                        <a asp-controller="Book" asp-action="CreateUpdate" asp-route-id="@book.Id" class="btn btn-primary">Edit</a>
+                        <a asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
