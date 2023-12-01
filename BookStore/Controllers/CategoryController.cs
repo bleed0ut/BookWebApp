@@ -7,15 +7,15 @@ namespace BookStore.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ICategoryRepository CategoryRepository;
-        public CategoryController(ICategoryRepository categoryRepository)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            CategoryRepository = categoryRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            List<Category> categories = CategoryRepository.GetAll().ToList();
+            List<Category> categories = _unitOfWork.CategoryRepository.GetAll().ToList();
             return View(categories);
         }
 
@@ -37,8 +37,8 @@ namespace BookStore.Controllers
             }
             if(ModelState.IsValid)
             {
-                CategoryRepository.Add(category);
-                CategoryRepository.Save();
+                _unitOfWork.CategoryRepository.Add(category);
+                _unitOfWork.Save();
                 TempData["success"] = "Category Created Successfully!";
                 return Redirect("Index");
             }
@@ -52,7 +52,7 @@ namespace BookStore.Controllers
                 return NotFound();
             }
 
-            Category? category = CategoryRepository.Get(c => c.Id == id);
+            Category? category = _unitOfWork.CategoryRepository.Get(c => c.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -62,8 +62,8 @@ namespace BookStore.Controllers
         }
         [HttpPost]
         public IActionResult Edit(Category category) {
-            CategoryRepository.Update(category);
-            CategoryRepository.Save();
+            _unitOfWork.CategoryRepository.Update(category);
+            _unitOfWork.Save();
             TempData["success"] = "Category Updated Successfully!";
             return RedirectToAction("Index");
         }
@@ -72,15 +72,15 @@ namespace BookStore.Controllers
         {
             if (id == 0 || id == null)
                 return NotFound();
-            Category category = CategoryRepository.Get(c => c.Id == id);    
+            Category category = _unitOfWork.CategoryRepository.Get(c => c.Id == id);    
             if (category == null)
                 return NotFound();
             return View(category);
         }
         [HttpPost]
         public IActionResult Delete(Category category) {
-            CategoryRepository.Delete(category);
-            CategoryRepository.Save();
+            _unitOfWork.CategoryRepository.Delete(category);
+            _unitOfWork.Save();
             TempData["success"] = "Category Deleted Successfully!";
             return RedirectToAction("Index");
         }

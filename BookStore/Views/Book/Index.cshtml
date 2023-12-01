@@ -13,6 +13,7 @@
                 <td>Title</td>
                 <td>Description</td>
                 <td>Author</td>
+                <td>Category</td>
                 <td>Price</td>
             </tr>
         </thead>
@@ -23,6 +24,7 @@
                     <td>@book.Title</td>
                     <td>@book.Description</td>
                     <td>@book.Author</td>
+                    <td>@book.Category.Name</td>
                     <td>@book.Price</td>
                     <td>
                         <a asp-controller="Book" asp-action="CreateUpdate" asp-route-id="@book.Id" class="btn btn-primary">Edit</a>
