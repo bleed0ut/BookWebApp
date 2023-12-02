@@ -1,37 +1,48 @@
 ﻿@model BookVM
 <h1>@(Model.Book.Id == 0? "Create" : "Update") a Book</h1>
-<form method="POST" >
+<form method="POST" enctype="multipart/form-data">
     <div class="border p-3 mt-4">
-        <div class="mb-3 row">
-            <label asp-for="Book.Title"> Title </label>
-            <input asp-for="Book.Title"/>
-            <span asp-validation-for="Book.Title" class="text-danger"></span>
-        </div>
-        <div class="mb-3 row">
-            <label asp-for="Book.Description"> Description </label>
-            <input asp-for="Book.Description" />
-            <span asp-validation-for="Book.Description" class="text-danger"></span>
-        </div>
-        <div class="mb-3 row">
-            <label asp-for="Book.Author"> Author </label>
-            <input asp-for="Book.Author" />
-            <span asp-validation-for="Book.Author" class="text-danger"></span>
-        </div>
-        <div class="mb-3 row">
-            <label asp-for="Book.Price"> Price </label>
-            <input asp-for="Book.Price" />
-            <span asp-validation-for="Book.Price" class="text-danger"></span>
-        </div>
-        <div class="mb-3 row">
-            <label asp-for="Book.CategoryId">Category</label>
-            <select asp-for="Book.CategoryId" asp-items="@Model.Categories"></select>
-            <span asp-validation-for="Book.CategoryId"></span>
-        </div>
-     </div>
-    <button type="submit" class="btn-primary">@(Model.Book.Id == 0 ? "Create" : "Update")</button>
-        <div>
+        <div class="row">
+            <div col="10">
+                <input asp-for="Book.Id" hidden/>
+                <input asp-for="Book.ImageUrl" hidden/>
+                <div class="mb-3 row">
+                    <label asp-for="Book.Title"> Title </label>
+                    <input asp-for="Book.Title" />
+                    <span asp-validation-for="Book.Title" class="text-danger"></span>
+                </div>
+                <div class="mb-3 row">
+                    <label asp-for="Book.Description"> Description </label>
+                    <input asp-for="Book.Description" />
+                    <span asp-validation-for="Book.Description" class="text-danger"></span>
+                </div>
+                <div class="mb-3 row">
+                    <label asp-for="Book.Author"> Author </label>
+                    <input asp-for="Book.Author" />
+                    <span asp-validation-for="Book.Author" class="text-danger"></span>
+                </div>
+                <div class="mb-3 row">
+                    <label asp-for="Book.Price"> Price </label>
+                    <input asp-for="Book.Price" />
+                    <span asp-validation-for="Book.Price" class="text-danger"></span>
+                </div>
+                <div class="mb-3 row">
+                    <label asp-for="Book.CategoryId">Category</label>
+                    <select asp-for="Book.CategoryId" asp-items="@Model.Categories"></select>
+                    <span asp-validation-for="Book.CategoryId"></span>
+                </div>
+                <div class="mb-3 row">
+                   <label asp-for="Book.ImageUrl"></label>
+                   <input type="file" name="file" class="form-control"/>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary">@(Model.Book.Id == 0 ? "Create" : "Update")</button>
             <a asp-controller="Book" asp-action="Index" class="btn btn-primary">Back to the list</a>
-        </div> 
+            </div>
+        </div>
+        <div class="col-2">
+            <img src="@Model.Book.ImageUrl" width="100%"/>
+        </div>
 </form>
 @section Scripts {
     @{

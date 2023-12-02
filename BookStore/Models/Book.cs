@@ -13,6 +13,8 @@ namespace BookStore.Models
         public string Author { get; set; }
         public float Price { get; set; }
         [ValidateNever]
+        public string? ImageUrl { get; set; }
+        [ValidateNever]
         public int CategoryId {  get; set; }
         [ForeignKey("CategoryId")]
         [ValidateNever]

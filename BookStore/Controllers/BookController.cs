@@ -11,9 +11,11 @@ namespace BookStore.Controllers
     public class BookController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public BookController (IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public BookController (IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -43,10 +45,33 @@ namespace BookStore.Controllers
             }
         }
         [HttpPost]
-        public IActionResult CreateUpdate(BookVM bookVM)
+        public IActionResult CreateUpdate(BookVM bookVM, IFormFile? file)
         {
             if(ModelState.IsValid)
             {
+                //handle book's image
+                string wwwrootPath = _webHostEnvironment.WebRootPath;
+                if (file != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    string bookPath = Path.Combine(wwwrootPath, @"images\books");
+                    
+                    if (!String.IsNullOrEmpty(bookVM.Book.ImageUrl))
+                    {
+                        var oldImagepath = Path.Combine(wwwrootPath, bookVM.Book.ImageUrl.TrimStart('\\'));
+                        if(System.IO.File.Exists(oldImagepath))
+                        {
+                            System.IO.File.Delete(oldImagepath);
+                        }
+                    }
+                    using (var fileStream = new FileStream(Path.Combine(bookPath, fileName), FileMode.Create))
+                    {
+                        file.CopyTo(fileStream);
+                    }
+                    bookVM.Book.ImageUrl = @"\images\books\" + fileName;
+                }
+
+                //create or update
                 if (bookVM.Book.Id == 0 || bookVM.Book.Id == null)
                 {
                     _unitOfWork.BookRepository.Add(bookVM.Book);
