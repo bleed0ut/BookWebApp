@@ -6,13 +6,14 @@ using BookStore.Responsitory.iRepository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace BookStore.Controllers
+namespace BookStore.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class BookController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public BookController (IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
+        public BookController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
             _webHostEnvironment = webHostEnvironment;
@@ -27,7 +28,8 @@ namespace BookStore.Controllers
         {
             BookVM bookVM = new BookVM()
             {
-                Categories = _unitOfWork.CategoryRepository.GetAll().Select(c => new SelectListItem {
+                Categories = _unitOfWork.CategoryRepository.GetAll().Select(c => new SelectListItem
+                {
                     Text = c.Name,
                     Value = c.Id.ToString()
                 }),
@@ -47,7 +49,7 @@ namespace BookStore.Controllers
         [HttpPost]
         public IActionResult CreateUpdate(BookVM bookVM, IFormFile? file)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 //handle book's image
                 string wwwrootPath = _webHostEnvironment.WebRootPath;
@@ -55,11 +57,11 @@ namespace BookStore.Controllers
                 {
                     string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
                     string bookPath = Path.Combine(wwwrootPath, @"images\books");
-                    
-                    if (!String.IsNullOrEmpty(bookVM.Book.ImageUrl))
+
+                    if (!string.IsNullOrEmpty(bookVM.Book.ImageUrl))
                     {
                         var oldImagepath = Path.Combine(wwwrootPath, bookVM.Book.ImageUrl.TrimStart('\\'));
-                        if(System.IO.File.Exists(oldImagepath))
+                        if (System.IO.File.Exists(oldImagepath))
                         {
                             System.IO.File.Delete(oldImagepath);
                         }

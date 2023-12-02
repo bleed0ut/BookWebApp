@@ -15,6 +15,7 @@
                 <td>Author</td>
                 <td>Category</td>
                 <td>Price</td>
+                <td>Image</td>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +27,9 @@
                     <td>@book.Author</td>
                     <td>@book.Category.Name</td>
                     <td>@book.Price</td>
+                    <td>
+                        <img src="@book.ImageUrl" width="60%"/>
+                    </td>
                     <td>
                         <a asp-controller="Book" asp-action="CreateUpdate" asp-route-id="@book.Id" class="btn btn-primary">Edit</a>
                         <a asp-controller="Book" asp-action="Delete" asp-route-id="@book.Id" class="btn btn-danger">Delete</a>

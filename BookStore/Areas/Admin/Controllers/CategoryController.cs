@@ -3,8 +3,9 @@ using BookStore.Models;
 using BookStore.Responsitory.iRepository;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BookStore.Controllers
+namespace BookStore.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -35,18 +36,19 @@ namespace BookStore.Controllers
             {
                 ModelState.AddModelError("Name", "Name cannot be equal to description");
             }
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 _unitOfWork.CategoryRepository.Add(category);
                 _unitOfWork.Save();
                 TempData["success"] = "Category Created Successfully!";
                 return Redirect("Index");
             }
-            
+
             return View();
         }
-        
-        public IActionResult Edit(int? id) {
+
+        public IActionResult Edit(int? id)
+        {
             if (id == 0 || id == null)
             {
                 return NotFound();
@@ -61,7 +63,8 @@ namespace BookStore.Controllers
             return View(category);
         }
         [HttpPost]
-        public IActionResult Edit(Category category) {
+        public IActionResult Edit(Category category)
+        {
             _unitOfWork.CategoryRepository.Update(category);
             _unitOfWork.Save();
             TempData["success"] = "Category Updated Successfully!";
@@ -72,13 +75,14 @@ namespace BookStore.Controllers
         {
             if (id == 0 || id == null)
                 return NotFound();
-            Category category = _unitOfWork.CategoryRepository.Get(c => c.Id == id);    
+            Category category = _unitOfWork.CategoryRepository.Get(c => c.Id == id);
             if (category == null)
                 return NotFound();
             return View(category);
         }
         [HttpPost]
-        public IActionResult Delete(Category category) {
+        public IActionResult Delete(Category category)
+        {
             _unitOfWork.CategoryRepository.Delete(category);
             _unitOfWork.Save();
             TempData["success"] = "Category Deleted Successfully!";
