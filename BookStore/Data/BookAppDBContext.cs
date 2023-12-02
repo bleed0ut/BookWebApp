@@ -1,9 +1,10 @@
 ﻿using BookStore.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Data
 {
-    public class BookAppDBContext : DbContext
+    public class BookAppDBContext : IdentityDbContext
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Book> Books { get; set; }
@@ -13,6 +14,7 @@ namespace BookStore.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Horror", Description = "This is so scary", DisplayOrder = 2 },
                 new Category { Id = 2, Name = "Action", Description = "Fighting to ", DisplayOrder = 3 },
